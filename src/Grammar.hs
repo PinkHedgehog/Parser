@@ -37,7 +37,8 @@ type Expression = [ExpressionPart]
 
 type ExpressionPart = [Term]
 
-data Term = LTerm Literal | RTerm RuleName deriving (Show, Eq)
+data Term = LTerm Literal | RTerm RuleName | RExpr ExpressionPart
+    deriving (Show, Eq)
 
 newtype RuleName = RuleName String deriving (Show, Eq)
 newtype Literal = Literal String deriving (Show, Eq)
@@ -96,8 +97,9 @@ parserGSyntax :: Parser [Rule]
 parserGSyntax = linesP parserRule
 
 
-generateParser :: GSyntax -> Parser ()
-generateParser grammar = empty 
+
+
+
 
 t3 :: [Char]
 t3 = "<rule>           ::= <opt-whitespace> \"<\" <rule-name> \">\" <opt-whitespace> \"::=\" <opt-whitespace> <expression> <line-end>\n<opt-whitespace> ::= \" \" <opt-whitespace> | \"\""

@@ -95,10 +95,10 @@ parserSQuotes :: Parser SQuotes
 parserSQuotes = SQuotes <$ charP '\'' <|> SQuotes <$ stringP "'"
 
 parserChar1 :: Parser Char1
-parserChar1 = (SChar1 <$> parserSQuotes) <|> EChar1 <$> predP (\x -> (isAlpha x || isDigit x || isMySymbol x || (x == '-')) && (x /= '\'') && isAscii x) -- || (x == '"')
+parserChar1 = (SChar1 <$> parserSQuotes) <|> EChar1 <$> predP (\x -> (isAlpha x || isDigit x || isMySymbol x || (x == '-')) && (x /= '\'') && isAscii x) 
 
 parserChar2 :: Parser Char2
-parserChar2 = (SChar2 <$> parserLQuotes) <|> EChar2 <$> predP (\x -> (isAlpha x || isDigit x || isMySymbol x || (x == '-')) && (x /= '"') && isAscii x) -- || (x == '\'')
+parserChar2 = (SChar2 <$> parserLQuotes) <|> EChar2 <$> predP (\x -> (isAlpha x || isDigit x || isMySymbol x || (x == '-')) && (x /= '"') && isAscii x) 
 
 parserText1 :: Parser Text1
 parserText1 = (SText1 <$ parserEmpty) <|> 

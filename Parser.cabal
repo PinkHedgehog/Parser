@@ -30,13 +30,18 @@ library
       Lib
     , Parser
     , Grammar
+    , Generator
+    , GeneratorIO
   other-modules:
-      Paths_Parser
+      --Paths_Parser
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
     , free
+    , unordered-containers
+    , bytestring
+    , mtl
   default-language: Haskell2010
 
 executable Parser-exe

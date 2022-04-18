@@ -1,4 +1,4 @@
-<expr>      ::= <constExpr> | <binOpExpr> | <negExpr>
+<expr>      ::= <const> | <binOpExpr> | <negExpr>
 <const>     ::= <int>
 <int>       ::= <digit> | <digit> <int>
 <digit>     ::= "0" | "1"

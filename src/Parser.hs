@@ -8,6 +8,8 @@ import Control.Monad
 import Data.Bifunctor
 import Data.Char
 
+
+
 newtype Parser a = Parser { unParser :: String -> [(String, a)] }
 
 parseString :: String -> Parser a -> Maybe a
@@ -63,7 +65,7 @@ acceptP = Parser $ \s -> [("", s)]
 instance Functor Parser where
     fmap f (Parser p1) = Parser p2
         where
-            p2 str = map (Data.Bifunctor.second f) $ p1 str
+            p2 str = map (second f) $ p1 str
 
 
 instance Applicative Parser where
@@ -92,9 +94,12 @@ lineEndP = () <$ (skip isControl <* skipString "")
 
 (<:>) :: Applicative f => f a -> f [a] -> f [a]
 (<:>) = liftA2 (:)
- 
+
 listP :: Parser b -> Parser a -> Parser [a]
-listP pdel parser = (stringP "" $> []) <|> (parser <:> pure []) <|> ((parser <* pdel) <:> listP pdel parser)
+listP pdel parser =
+        (stringP "" $> [])
+    <|> (parser <:> pure [])
+    <|> ((parser <* pdel) <:> listP pdel parser)
     -- many pdel *> liftA2 (:) parser
 
 listPChar :: Char -> Parser a -> Parser [a]
@@ -104,3 +109,16 @@ listPChar c parser = ((predP (\x -> isControl x || x == c) *> stringP "") $> [])
 
 linesP :: Parser a -> Parser [a]
 linesP = listP lineEndP
+
+listAltP :: [Parser a] -> Parser a
+listAltP = foldl' (<|>) empty
+
+seqP :: Monoid a => [Parser a] -> Parser a
+seqP = foldr (\ p acc -> mappend <$> p <*> acc) (pure mempty)
+
+--instance Eq a => Eq (Parser a) where
+
+-- seqP [] = pure mempty 
+-- seqP (p:ps) = 
+--     --let p' = mappend <$> p
+--     --in p' `seq` p' <*> seqP ps 
